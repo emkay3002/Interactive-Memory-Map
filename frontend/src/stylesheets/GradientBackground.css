@@ -35,8 +35,8 @@
     rgba(238, 0, 255, 0.5),
     rgba(0, 204, 255, 0.5)
   );
-  z-index: 1;
   filter: blur(100px);
+  z-index: 1;
 }
 
 .content-container {
