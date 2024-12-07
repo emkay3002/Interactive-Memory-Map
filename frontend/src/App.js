@@ -1,10 +1,16 @@
-import React from "react";
-import Homepage from "./pages/homepage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/homepage";
+import Loginpage from "./pages/loginPage";
+
 function App() {
   return (
-    <div className="App">
-      <Homepage /> {/* Render the Homepage component */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signin" element={<Loginpage />} />
+        {/* <Route path="/register" element={<SignupPage />} /> */}
+      </Routes>
+    </Router>
   );
 }
 

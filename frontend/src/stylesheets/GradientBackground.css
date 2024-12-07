@@ -10,6 +10,19 @@
   padding: 0;
 }
 
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  /* background-color: #0e0823; //change this baad me */
+  background-color: #d7f0ff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+}
+
 .gradient-overlay {
   position: absolute;
   top: 100px;
