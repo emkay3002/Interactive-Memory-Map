@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const Capsule = require("../models/capsuleModel");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 const updateBio = async (req, res) => {
   const userId = req.user.userId;
