@@ -1,0 +1,47 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+    padding: 20px;
+    
+    width: 400px; /* Wider than the sidebar */
+    height: 100%;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h2 {
+    color: white;
+    font-size: 18px;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .dashboard-btn {
+    padding: 15px 25px;
+    font-size: 16px;
+    font-family: "Montserrat", sans-serif;
+    color: white;
+    background: linear-gradient(135deg, rgba(238, 0, 255, 0.8), rgba(0, 204, 255, 0.8));
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dashboard-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 204, 255, 0.8), rgba(238, 0, 255, 0.8));
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+  }
+  
