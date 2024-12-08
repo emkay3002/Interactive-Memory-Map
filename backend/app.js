@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.originalUrl}`);
   next(); // Continue processing the request
 });
-app.use("/auth", authMiddleware, authRoutes);
+app.use("/auth",  authRoutes);
 app.use("/api/capsules", capsuleRoutes);
 
 // router.get("/capsules", (req, res) => {
