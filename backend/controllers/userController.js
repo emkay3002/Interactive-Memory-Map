@@ -2,6 +2,32 @@ const User = require("../models/userModel");
 const Capsule = require("../models/capsuleModel");
 const bcrypt = require("bcrypt");
 
+const returnUser = async (req, res) => {
+  try {
+    // Retrieve token from localStorage (on client side, you would send it via headers for security)
+    const token = req.headers.authorization?.split(" ")[1]; // Bearer <token>
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Decode the token
+    const decoded = jwt.verify(token, "your_secret_key"); // Replace with your secret key
+    const userId = decoded.userId; // Assumes userId is in the token payload
+
+    // Fetch user from database
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return user details
+    res.json({ user });
+  } catch (error) {
+    console.error("Error decoding token or fetching user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 const updateBio = async (req, res) => {
   const userId = req.user.userId;
   const username = req.user.username;
@@ -89,3 +115,5 @@ const updatePassword = async (req, res) => {
     res.status(500).json({ message: "Failed to update password", error });
   }
 };
+
+module.exports = { returnUser };

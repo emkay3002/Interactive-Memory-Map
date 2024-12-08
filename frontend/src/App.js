@@ -8,6 +8,7 @@ import HomePage from "./pages/homepage";
 import LoggedIn from "./pages/loggedinHome";
 import Loginpage from "./pages/loginPage";
 import SignupPage from "./pages/signupPage";
+import ProfilePage from "./pages/profilePage";
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/friends" element={<FriendPage />} />
         <Route path="/grouppage" element={<Grouppage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

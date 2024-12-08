@@ -7,6 +7,7 @@ const { authMiddleware, adminOnly } = require("./middlewares/authMiddleware");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const predictionsRoute = require("./routes/predictionsRoute");
+const userRoutes = require("./routes/userRoutes");
 //const taskRoutes = require("./routes/tasks");
 
 const app = express();
@@ -22,7 +23,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRoutes);
 app.use("/api/capsules", capsuleRoutes);
 app.use("/api/predictions", predictionsRoute);
-
+app.use("/api/user", userRoutes);
 
 // router.get("/capsules", (req, res) => {
 //   res.json({ message: "GET request works!" });

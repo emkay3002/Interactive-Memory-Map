@@ -12,8 +12,11 @@ const GenNavbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to={isAuthenticated ? "/loggedIn" : "/"}> {/* Conditionally navigate for logo */}
-          <h1 className="logo-text">Moo Deng</h1> {/* Add a class for styling */}
+        <Link to={isAuthenticated ? "/loggedIn" : "/"}>
+          {" "}
+          {/* Conditionally navigate for logo */}
+          <h1 className="logo-text">Moo Deng</h1>{" "}
+          {/* Add a class for styling */}
         </Link>
       </div>
       <ul className="nav-links">
@@ -44,9 +47,11 @@ const GenNavbar = () => {
           <img src={messageImage} alt="Notification" className="nav-image" />
         </div>
         {/* Profile Placeholder */}
-        <div className="nav-icon" title="Profile">
-          <img src={user} alt="user" className="nav-image" />
-        </div>
+        <Link to="/profile">
+          <div className="nav-icon" title="Profile">
+            <img src={user} alt="user" className="nav-image" />
+          </div>
+        </Link>
       </div>
     </nav>
   );
