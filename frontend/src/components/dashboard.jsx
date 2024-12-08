@@ -15,7 +15,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import CapsuleForm from "./CapsuleForm"; // Ensure correct import path
+import CapsuleForm from "./CapsuleFormGroup"; // Ensure correct import path
 
 const Dashboard = () => {
   const [groups, setGroups] = useState([]);
