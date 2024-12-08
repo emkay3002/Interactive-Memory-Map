@@ -1,25 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "../stylesheets/Navbar.css";
 
 const Navbar = () => {
+  // Check if the user is logged in (e.g., by checking localStorage for a token)
+  const isAuthenticated = localStorage.getItem("token");
+
   return (
     <nav className="navbar">
       <div className="logo">
-        <h1>Moo Deng</h1>
+        <Link to={isAuthenticated ? "/loggedIn" : "/"}> {/* Conditionally navigate */}
+          <h1 className="logo-text">Moo Deng</h1> {/* Add a class for styling */}
+        </Link>
       </div>
       <ul className="nav-links">
         <li>
-          <a href="/">Home</a>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="/about">About</a>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <a href="/capsules">Capsules</a>
+          <Link to="/capsules">Capsules</Link>
         </li>
         <li>
-          <a href="/friends">Friends</a>
+          <Link to="/friends">Friends</Link>
         </li>
       </ul>
       <div className="auth-buttons">

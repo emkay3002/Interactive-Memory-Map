@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import "../stylesheets/GradientBackground.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();  // Initialize useNavigate
 
+  // Check if the user is already logged in
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("token");
+    if (isAuthenticated) {
+      navigate("/loggedin"); // Redirect to logged-in page if already authenticated
+    }
+  }, [navigate]);
+
+  // Handle login form submission
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
     setError(""); // Clear any previous errors
@@ -18,20 +29,20 @@ const LoginPage = () => {
         },
         body: JSON.stringify({ username, password }),
       });
-
-      if (response.success === false) {
+      const data = await response.json();
+      console.log("Login successful:", data);
+      
+      if (data.success === false) {
         throw new Error("Login failed. Please check your credentials.");
       } else {
         alert("User logged in successfully!");
+
+        // Store the token in localStorage (optional)
+        localStorage.setItem("token", data.token);
+
+        // Redirect to the homepage (logged-in page)
+        navigate("/loggedin"); 
       }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
-
-      // Redirect or store token as needed
-      // For example:
-      // localStorage.setItem("token", data.token);
-      // window.location.href = "/dashboard";
     } catch (error) {
       console.error("Error during login:", error);
       setError(error.message);

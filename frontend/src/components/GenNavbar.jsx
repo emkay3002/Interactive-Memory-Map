@@ -1,40 +1,51 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import bellImage from "../images/bell-filled.png";
 import messageImage from "../images/message-circle-filled.png";
 import user from "../images/user.png";
 import "../stylesheets/GenNavbar.css";
+
 const GenNavbar = () => {
+  // Check if the user is logged in (e.g., by checking localStorage for a token)
+  const isAuthenticated = localStorage.getItem("token");
+
   return (
     <nav className="navbar">
       <div className="logo">
-        <h1>Moo Deng</h1>
+        <Link to={isAuthenticated ? "/loggedIn" : "/"}> {/* Conditionally navigate for logo */}
+          <h1 className="logo-text">Moo Deng</h1> {/* Add a class for styling */}
+        </Link>
       </div>
       <ul className="nav-links">
         <li>
-          <a href="/">Home</a>
+          {/* Conditionally navigate for Home link */}
+          <Link to={isAuthenticated ? "/loggedIn" : "/"}>Home</Link>
         </li>
         <li>
-          <a href="/about">About</a>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <a href="/capsules">Capsules</a>
+          <Link to="/capsules">Capsules</Link>
         </li>
         <li>
-          <a href="/friends">Friends</a>
+          <Link to="/friends">Friends</Link>
+        </li>
+        <li>
+          <Link to="/grouppage">Groups</Link>
         </li>
       </ul>
       <div className="nav-icons">
         {/* Notification Placeholder */}
         <div className="nav-icon" title="Notifications">
-        <img src={bellImage} alt="Notification" className="nav-image" />
+          <img src={bellImage} alt="Notification" className="nav-image" />
         </div>
         {/* Chat Placeholder */}
         <div className="nav-icon" title="Chat">
-        <img src={messageImage} alt="Notification" className="nav-image" />
+          <img src={messageImage} alt="Notification" className="nav-image" />
         </div>
         {/* Profile Placeholder */}
         <div className="nav-icon" title="Profile">
-        <img src={user} alt="user" className="nav-image" />
+          <img src={user} alt="user" className="nav-image" />
         </div>
       </div>
     </nav>

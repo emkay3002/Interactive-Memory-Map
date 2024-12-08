@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
 const capsuleRoutes = require("./routes/capsuleRoutes");
 const { authMiddleware, adminOnly } = require("./middlewares/authMiddleware");
 const cors = require("cors");
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.originalUrl}`);
   next(); // Continue processing the request
 });
-app.use("/auth",  authRoutes);
+app.use("/auth", authRoutes);
 app.use("/api/capsules", capsuleRoutes);
 
 // router.get("/capsules", (req, res) => {

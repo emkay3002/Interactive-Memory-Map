@@ -1,12 +1,11 @@
-//landing page
 import React from "react";
-import Navbar from "../components/navbar";
+import GenNavbar from "../components/GenNavbar";
 import "../stylesheets/GradientBackground.css";
-const Homepage = () => {
+const loggedIn = () => {
     return (
         
       <div className="homepage-container">
-        <Navbar /> {}
+        <GenNavbar /> {}
         <div className="gradient-overlay">
           {}
         </div>
@@ -15,4 +14,4 @@ const Homepage = () => {
     );
   };
   
-  export default Homepage;
+  export default loggedIn;

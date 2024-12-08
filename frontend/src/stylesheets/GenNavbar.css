@@ -134,3 +134,10 @@
     font-size: 18px;
   }
 }
+
+.logo-text {
+  color: inherit;
+  /* Or your desired color */
+  text-decoration: none;
+  /* Remove underline if it's applied */
+}
