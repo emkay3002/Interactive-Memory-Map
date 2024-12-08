@@ -15,16 +15,26 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import CapsuleForm from "./CapsuleForm"; // Ensure correct import path
 
 const Dashboard = () => {
   const [groups, setGroups] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentGroup, setCurrentGroup] = useState(null);
-  const [capsuleContent, setCapsuleContent] = useState("");
   const [memberRoles, setMemberRoles] = useState({});
-  
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU0YzYzNThkY2IyOGE5NjI4NmJhYTkiLCJ1c2VybmFtZSI6ImFuYXMiLCJyb2xlIjoiVXNlciIsImlhdCI6MTczMzY1MTIxNSwiZXhwIjoxNzMzNjU0ODE1fQ.cCIVNEPfhQWo7qDU0Njek3CPJqDWc-ufDBovefKRXoA";
+  const [openCapsuleForm, setOpenCapsuleForm] = useState(false);
+  const [capsuleFormData, setCapsuleFormData] = useState({
+    title: "",
+    content: "",
+    media: "",
+    unlockDate: "",
+    tags: "",
+    isGroupCapsule: true,
+    group: "",
+  });
+  const [groupCapsules, setGroupCapsules] = useState([]);
+
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU0YzYzNThkY2IyOGE5NjI4NmJhYTkiLCJ1c2VybmFtZSI6ImFuYXMiLCJyb2xlIjoiVXNlciIsImlhdCI6MTczMzY3MjUwNiwiZXhwIjoxNzMzNjc2MTA2fQ.ZO1G6rN1OLSi7vvtQIdDrQmqetM00f7Ur6_JQWokC6I";
 
   useEffect(() => {
     if (token) {
@@ -44,23 +54,42 @@ const Dashboard = () => {
         })
         .catch((err) => console.error(err));
     }
-  }, []);
+  }, [token]);
 
-  const handleOpen = (group) => {
+  const handleOpen = async (group) => {
     setCurrentGroup(group);
-    // Create a roles map for the modal
     const rolesMap = {};
     group.members.forEach((member) => {
       const role = group.roles.find((r) => r.user === member._id)?.role || "Member";
       rolesMap[member._id] = role;
     });
     setMemberRoles(rolesMap);
+    if (token) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/capsules?group=${group._id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setGroupCapsules(data.capsules || []);
+        } else {
+          alert(data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error fetching capsules.");
+      }
+    }
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
     setMemberRoles({});
+    setGroupCapsules([]);
   };
 
   const handleRoleChange = (memberId, role) => {
@@ -71,9 +100,7 @@ const Dashboard = () => {
   };
 
   const saveRoles = async () => {
-   
     if (token && currentGroup) {
-      console.log(token);
       const rolesArray = Object.entries(memberRoles).map(([userId, role]) => ({
         user: userId,
         role,
@@ -98,6 +125,47 @@ const Dashboard = () => {
         console.error(error);
         alert("Error updating roles. Please try again.");
       }
+    }
+  };
+
+  const handleOpenCapsuleForm = () => {
+    if (currentGroup) {
+      setCapsuleFormData((prev) => ({
+        ...prev,
+        group: currentGroup._id,
+        isGroupCapsule: true,
+      }));
+      setOpenCapsuleForm(true);
+    } else {
+      alert("Please select a group.");
+    }
+  };
+
+  const handleCloseCapsuleForm = () => {
+    setOpenCapsuleForm(false);
+  };
+
+  const handleCapsuleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/capsules', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(capsuleFormData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        setOpenCapsuleForm(false);
+        handleOpen(currentGroup);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error creating capsule');
     }
   };
 
@@ -158,9 +226,7 @@ const Dashboard = () => {
                       <Select
                         labelId={`role-label-${member._id}`}
                         value={memberRoles[member._id] || "Member"}
-                        onChange={(e) =>
-                          handleRoleChange(member._id, e.target.value)
-                        }
+                        onChange={(e) => handleRoleChange(member._id, e.target.value)}
                       >
                         <MenuItem value="Admin">Admin</MenuItem>
                         <MenuItem value="Member">Member</MenuItem>
@@ -177,10 +243,45 @@ const Dashboard = () => {
               >
                 Save Roles
               </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpenCapsuleForm}
+                sx={{ mt: 2 }}
+              >
+                Create Group Capsule
+              </Button>
+              <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
+                Capsules:
+              </Typography>
+              <List>
+                {groupCapsules.length > 0 ? (
+                  groupCapsules.map((capsule) => (
+                    <ListItem key={capsule._id}>
+                      <ListItemText
+                        primary={capsule.title}
+                        secondary={new Date(capsule.unlockDate).toLocaleString()}
+                      />
+                    </ListItem>
+                  ))
+                ) : (
+                  <Typography variant="body1">No capsules yet.</Typography>
+                )}
+              </List>
             </>
           )}
         </Box>
       </Modal>
+
+      {openCapsuleForm && (
+        <CapsuleForm
+          formData={capsuleFormData}
+          setFormData={setCapsuleFormData}
+          handleSubmit={handleCapsuleSubmit}
+          toggleForm={handleCloseCapsuleForm}
+          group={currentGroup._id}
+        />
+      )}
     </Box>
   );
 };
