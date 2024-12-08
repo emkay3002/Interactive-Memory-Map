@@ -12,7 +12,7 @@ const LoginPage = () => {
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("token");
     if (isAuthenticated) {
-      navigate("/loggedin"); // Redirect to logged-in page if already authenticated
+      navigate("/signin"); // Redirect to logged-in page if already authenticated
     }
   }, [navigate]);
 
