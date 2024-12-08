@@ -30,11 +30,9 @@
   transform: translateX(-50%);
   width: 80%;
   height: 40%;
-  background: radial-gradient(
-    circle,
-    rgba(238, 0, 255, 0.5),
-    rgba(0, 204, 255, 0.5)
-  );
+  background: radial-gradient(circle,
+      rgba(238, 0, 255, 0.5),
+      rgba(0, 204, 255, 0.5));
   filter: blur(100px);
   z-index: 1;
 }
@@ -83,6 +81,234 @@ h1 {
 
   h1 {
     font-size: 24px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.homepage-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #0e0823;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+}
+
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  /* background-color: #0e0823; // change this later if needed */
+  background-color: #d7f0ff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+}
+
+.gradient-overlay {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 40%;
+  background: radial-gradient(circle,
+      rgba(238, 0, 255, 0.5),
+      rgba(0, 204, 255, 0.5));
+  filter: blur(100px);
+  z-index: 1;
+}
+
+.content-container {
+  text-align: center;
+  color: white;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  position: relative;
+  z-index: 2;
+  margin-top: 20px;
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 600;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+/* Add Capsule Tile and Capsule Grid Styles */
+.capsules-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.capsule-tile {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 250px;
+  min-width: 200px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.capsule-tile:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.capsule-tile h2 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.capsule-tile p {
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Form Overlay */
+.overlay-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.form-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+}
+
+.form-container h2 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(238, 0, 255, 0.7);
+}
+
+button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: rgb(49, 28, 124);
+  border: 2px solid rgb(28, 16, 70);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button:hover {
+  background-color: rgb(39, 24, 98);
+  /* Darker shade on hover */
+  border: 2px solid rgb(28, 16, 70);
+}
+
+button[type="button"],
+button[type="submit"] {
+  background-color: rgb(49, 28, 124);
+  border: 2px solid rgb(28, 16, 70);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button[type="button"]:hover,
+button[type="submit"]:hover {
+  background-color: rgb(39, 24, 98);
+  /* Darker shade on hover */
+  border: 2px solid rgb(28, 16, 70);
+}
+
+
+
+@media (max-width: 768px) {
+  .gradient-overlay {
+    width: 90%;
+    height: 30%;
+  }
+
+  .content-container {
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .capsule-tile {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .gradient-overlay {
+    width: 95%;
+    height: 25%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .capsule-tile {
+    width: 100%;
   }
 }
 

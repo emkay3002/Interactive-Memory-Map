@@ -19,7 +19,7 @@ const Navbar = () => {
           <a href="/capsules">Capsules</a>
         </li>
         <li>
-          <a href="/profile">Profile</a>
+          <a href="/friends">Friends</a>
         </li>
       </ul>
       <div className="auth-buttons">

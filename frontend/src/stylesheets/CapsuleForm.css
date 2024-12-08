@@ -1,0 +1,73 @@
+/* Capsule form container */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  width: 900px; /* Set fixed width */
+  max-width: 90%;
+  height: auto; /* Auto height to fit the content */
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+.form-group {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 14px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.form-container .form-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.form-container button {
+  width: 48%;
+}
+
+.overlay-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Align input fields side by side */
+.form-group .mb-4 {
+  width: 48%; /* Reduce width of each field */
+}
+
+.form-group .mb-4 textarea {
+  width: 100%;
+}
+
+.form-group .mb-4 input[type="datetime-local"],
+.form-group .mb-4 input[type="text"],
+.form-group .mb-4 input[type="checkbox"] {
+  width: 100%;
+}
+
+/* Remove scroll behavior */
+.form-container {
+  max-height: 100%; /* Make sure the form fits within its container */
+}
