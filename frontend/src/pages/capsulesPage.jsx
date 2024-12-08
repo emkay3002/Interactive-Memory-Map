@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import CapsuleForm from "../components/CapsuleForm"; // Import the CapsuleForm component
+import CapsuleForm from "../components/CapsuleForm";
+import PredictionForm from "../components/PredictionForm";
 import GenNavbar from "../components/GenNavbar";
 import "../stylesheets/GradientBackground.css";
 
 const CapsulesPage = () => {
-  const [isFormOpen, setIsFormOpen] = useState(false); // To control form visibility
+  const [isCapsuleFormOpen, setIsCapsuleFormOpen] = useState(false);
+  const [isPredictionFormOpen, setIsPredictionFormOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -16,13 +18,16 @@ const CapsulesPage = () => {
     permissions: [],
   });
 
-  const toggleForm = () => {
-    setIsFormOpen(!isFormOpen); // Toggle the state to open/close the form
+  const toggleCapsuleForm = () => {
+    setIsCapsuleFormOpen(!isCapsuleFormOpen);
   };
 
-  const handleSubmit = async (e) => {
+  const togglePredictionForm = () => {
+    setIsPredictionFormOpen(!isPredictionFormOpen);
+  };
+
+  const handleCapsuleSubmit = async (e) => {
     e.preventDefault();
-    // Send the form data to the backend
     try {
       const response = await fetch("http://localhost:3000/api/capsules", {
         method: "POST",
@@ -35,7 +40,7 @@ const CapsulesPage = () => {
       const result = await response.json();
       if (response.status === 201) {
         alert(result.message);
-        setIsFormOpen(false); // Close the form after successful submission
+        setIsCapsuleFormOpen(false);
       } else {
         alert(result.message);
       }
@@ -55,10 +60,19 @@ const CapsulesPage = () => {
         {/* Add Capsule Tile as Button */}
         <div
           className="capsule-tile bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 backdrop-blur-md border border-white/30 rounded-lg p-6 shadow-lg hover:scale-105 transition-all duration-300 w-60 cursor-pointer"
-          onClick={toggleForm} // Toggle form visibility on click
+          onClick={toggleCapsuleForm}
         >
           <h2 className="text-white text-xl font-semibold mb-4">Add New Capsule</h2>
           <p className="text-white text-sm">Click to create a new capsule.</p>
+        </div>
+
+        {/* Add Prediction Tile as Button */}
+        <div
+          className="capsule-tile bg-gradient-to-r from-green-600 via-green-700 to-blue-800 backdrop-blur-md border border-white/30 rounded-lg p-6 shadow-lg hover:scale-105 transition-all duration-300 w-60 cursor-pointer"
+          onClick={togglePredictionForm}
+        >
+          <h2 className="text-white text-xl font-semibold mb-4">Add New Prediction</h2>
+          <p className="text-white text-sm">Click to create a new prediction.</p>
         </div>
 
         {/* Tiled Capsules */}
@@ -68,13 +82,20 @@ const CapsulesPage = () => {
         </div>
       </div>
 
-      {/* Show the form if isFormOpen is true */}
-      {isFormOpen && (
+      {/* Show the CapsuleForm if isCapsuleFormOpen is true */}
+      {isCapsuleFormOpen && (
         <CapsuleForm
           formData={formData}
           setFormData={setFormData}
-          handleSubmit={handleSubmit}
-          toggleForm={toggleForm}
+          handleSubmit={handleCapsuleSubmit}
+          toggleForm={toggleCapsuleForm}
+        />
+      )}
+
+      {/* Show the PredictionForm if isPredictionFormOpen is true */}
+      {isPredictionFormOpen && (
+        <PredictionForm
+          toggleForm={togglePredictionForm}
         />
       )}
     </div>
@@ -82,3 +103,4 @@ const CapsulesPage = () => {
 };
 
 export default CapsulesPage;
+
