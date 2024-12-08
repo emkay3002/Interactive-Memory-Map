@@ -11,7 +11,7 @@ const returnUser = async (req, res) => {
     }
 
     // Decode the token
-    const decoded = jwt.verify(token, "your_secret_key"); // Replace with your secret key
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Replace with your secret key
     const userId = decoded.userId; // Assumes userId is in the token payload
 
     // Fetch user from database

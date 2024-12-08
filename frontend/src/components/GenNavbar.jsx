@@ -38,10 +38,19 @@ const GenNavbar = () => {
         </li>
       </ul>
       <div className="nav-icons">
-        {/* Notification Placeholder */}
-        <div className="nav-icon" title="Notifications">
-          <img src={bellImage} alt="Notification" className="nav-image" />
-        </div>
+        {/* Logout Placeholder */}
+        {isAuthenticated && (
+          <div
+            className="nav-icon"
+            title="Logout"
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.href = "/";
+            }}
+          >
+            <img src={user} alt="Logout" className="nav-image" />
+          </div>
+        )}
         {/* Chat Placeholder */}
         <div className="nav-icon" title="Chat">
           <img src={messageImage} alt="Notification" className="nav-image" />
