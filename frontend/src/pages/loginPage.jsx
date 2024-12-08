@@ -20,7 +20,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
     setError(""); // Clear any previous errors
-
+  
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -29,25 +29,28 @@ const LoginPage = () => {
         },
         body: JSON.stringify({ username, password }),
       });
+  
       const data = await response.json();
-      console.log("Login successful:", data);
-      
-      if (data.success === false) {
-        throw new Error("Login failed. Please check your credentials.");
+      console.log("Login response:", data); // Log the full response to see its structure
+  
+      if (!response.ok || !data.token) {
+        // If response is not ok (non-2xx status code) or token is missing, show error
+        throw new Error(data.message || "Login failed. Please check your credentials.");
       } else {
         alert("User logged in successfully!");
-
+  
         // Store the token in localStorage (optional)
         localStorage.setItem("token", data.token);
-
+  
         // Redirect to the homepage (logged-in page)
         navigate("/loggedin"); 
       }
     } catch (error) {
       console.error("Error during login:", error);
-      setError(error.message);
+      setError(error.message); // Display error message to the user
     }
   };
+  
 
   return (
     <div className="relative h-screen w-screen flex items-center justify-center bg-[#0e0823]">
@@ -117,3 +120,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
