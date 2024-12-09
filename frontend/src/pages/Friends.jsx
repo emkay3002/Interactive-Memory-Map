@@ -1,17 +1,45 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import FriendSearch from "../components/FriendSearch";
 import GenNavbar from "../components/GenNavbar";
 import "../stylesheets/GradientBackground.css";
-const AboutPage = () => {
-    return (
-        
-      <div className="homepage-container">
-        <GenNavbar /> {}
-        <div className="gradient-overlay">
-          {}
-        </div>
-       
+
+const FriendsPage = ({ currentUserId }) => {
+  const [currentUserUsername, setCurrentUserUsername] = useState(null);
+
+  // Fetch current user data on page load
+  useEffect(() => {
+    // You can fetch current user data here using `currentUserId` if needed
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.username) {
+          setCurrentUserUsername(decodedToken.username);
+        } else {
+          console.error("No username found in token");
+          localStorage.removeItem("token");
+        }
+      } catch (error) {
+        console.error("Invalid token", error);
+        localStorage.removeItem("token");
+      }
+    }
+  }, [currentUserId]);
+
+  return (
+    <div className="homepage-container">
+      <GenNavbar />
+      <div className="gradient-overlay">
+        <h1>Friends Page</h1>
+        {currentUserUsername ? (
+          <FriendSearch currentUserUsername={currentUserUsername} />
+        ) : (
+          <p>Please log in to search for and add friends.</p>
+        )}
       </div>
-    );
-  };
-  
-  export default AboutPage;
+    </div>
+  );
+};
+
+export default FriendsPage;
