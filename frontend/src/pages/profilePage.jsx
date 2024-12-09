@@ -12,6 +12,7 @@ const ProfilePage = () => {
     bio: "",
   });
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profileVisibility, setProfileVisibility] = useState(true); // State for profileVisibility
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,6 +37,7 @@ const ProfilePage = () => {
           email: data.user.email || "",
           bio: data.user.bio || "",
         });
+        setProfileVisibility(data.user.privacySettings.profileVisibility); // Set initial visibility state
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -55,6 +57,10 @@ const ProfilePage = () => {
     setProfilePicture(e.target.files[0]); // Save the selected file
   };
 
+  const handleVisibilityToggle = () => {
+    setProfileVisibility(!profileVisibility); // Toggle profile visibility
+  };
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -64,6 +70,7 @@ const ProfilePage = () => {
       data.append("username", formData.username);
       data.append("email", formData.email);
       data.append("bio", formData.bio);
+      data.append("profileVisibility", profileVisibility); // Add profileVisibility to the form data
 
       // Add profile picture if provided
       if (profilePicture) {
@@ -198,6 +205,20 @@ const ProfilePage = () => {
                   editing ? "bg-white/10" : ""
                 }`}
               ></textarea>
+            </div>
+
+            {/* Profile Visibility Toggle */}
+            <div className="mb-4 flex items-center">
+              <label className="text-sm text-white mr-2">
+                Profile Visibility
+              </label>
+              <input
+                type="checkbox"
+                checked={profileVisibility}
+                onChange={handleVisibilityToggle}
+                disabled={!editing} // Disable toggle when not editing
+                className="w-4 h-4 text-purple-500"
+              />
             </div>
 
             {/* Edit and Save Buttons */}
