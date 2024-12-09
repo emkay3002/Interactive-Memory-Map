@@ -1,5 +1,5 @@
 .homepage-container {
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   background-color: #0e0823;
   position: relative;
@@ -29,12 +29,12 @@
   left: 50%;
   transform: translateX(-50%);
   width: 80%;
-  height: 40%;
+  height: 100%;
   background: radial-gradient(circle,
       rgba(238, 0, 255, 0.5),
       rgba(0, 204, 255, 0.5));
   filter: blur(100px);
-  z-index: 1;
+  z-index: -1;
 }
 
 .content-container {
@@ -96,7 +96,7 @@ html {
 }
 
 .homepage-container {
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   background-color: #0e0823;
   position: relative;
@@ -131,7 +131,7 @@ html {
       rgba(238, 0, 255, 0.5),
       rgba(0, 204, 255, 0.5));
   filter: blur(100px);
-  z-index: 1;
+  z-index: 0;
 }
 
 .content-container {
