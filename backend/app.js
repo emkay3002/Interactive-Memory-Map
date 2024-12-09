@@ -8,7 +8,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const predictionsRoute = require("./routes/predictionsRoute");
 //const taskRoutes = require("./routes/tasks");
-
+const friendshipRoutes = require("./routes/friendshipRoutes");
 const app = express();
 
 // Middleware setup
@@ -23,6 +23,7 @@ app.use("/auth", authRoutes);
 app.use("/api/capsules", capsuleRoutes);
 app.use("/api/predictions", predictionsRoute);
 
+app.use("/api/friendships", friendshipRoutes);
 
 // router.get("/capsules", (req, res) => {
 //   res.json({ message: "GET request works!" });
