@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
+import Navbar from "../components/navbar";
+import GenNavbar from "../components/GenNavbar";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const [profileVisibility, setProfileVisibility] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    bio: "",
+  });
+  const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
-    // Fetch user data from API
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token"); // Retrieve the token
+        const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:3000/user/profile", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include token for authentication
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -23,8 +30,12 @@ const ProfilePage = () => {
         }
 
         const data = await response.json();
-        setUser(data);
-        setProfileVisibility(data.privacySettings?.profileVisibility || true);
+        setUser(data.user);
+        setFormData({
+          username: data.user.username || "",
+          email: data.user.email || "",
+          bio: data.user.bio || "",
+        });
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -35,151 +46,180 @@ const ProfilePage = () => {
     fetchUser();
   }, []);
 
-  const handleVisibilityChange = async () => {
-    const previousVisibility = profileVisibility; // Save the current state
-    const newVisibility = !profileVisibility;
-    setProfileVisibility(newVisibility);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
+  const handleFileChange = (e) => {
+    setProfilePicture(e.target.files[0]); // Save the selected file
+  };
+
+  const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/user/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include token for authentication
-        },
-        body: JSON.stringify({
-          userId: user._id,
-          profileVisibility: newVisibility,
-        }),
-      });
+      const data = new FormData();
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to update visibility");
+      // Add form fields to FormData
+      data.append("username", formData.username);
+      data.append("email", formData.email);
+      data.append("bio", formData.bio);
+
+      // Add profile picture if provided
+      if (profilePicture) {
+        data.append("profilePicture", profilePicture);
       }
 
-      alert("Profile visibility updated successfully");
+      const response = await fetch("http://localhost:3000/user/update", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data, // Send FormData
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const updatedUser = await response.json();
+      setUser(updatedUser.user);
+      setEditing(false);
+      alert("Profile updated successfully!");
     } catch (error) {
-      console.error("Error updating profile visibility:", error);
-      alert("Failed to update profile visibility");
-      setProfileVisibility(previousVisibility); // Revert state on failure
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
     }
   };
 
   if (loading) {
     return (
-      <div className="relative h-screen flex items-center justify-center homepage-container">
-        <p className="text-white text-xl">Loading...</p>
-      </div>
+      <>
+        {" "}
+        <GenNavbar />
+        <div className="relative h-screen flex items-center justify-center bg-[#0e0823]">
+          <p className="text-white text-xl">Loading...</p>
+        </div>
+      </>
     );
   }
 
   if (!user) {
     return (
-      <div className="relative h-screen flex items-center justify-center homepage-container">
-        <p className="text-red-500 text-xl">Failed to load profile</p>
-      </div>
+      <>
+        <GenNavbar />
+        <div className="relative h-screen flex items-center justify-center bg-[#0e0823]">
+          <p className="text-red-500 text-xl">Failed to load profile</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="relative h-screen flex items-center justify-center homepage-container">
-      <div className="gradient-overlay"></div>
+    <>
+      <GenNavbar />
+      <div className="relative h-screen flex items-center justify-center bg-[#0e0823]">
+        <div className="gradient-overlay"></div>
 
-      {/* Profile Card */}
-      <div className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-md border border-white/30 rounded-lg p-8 shadow-lg">
-        <h1 className="text-2xl font-semibold text-white text-center mb-6">
-          Your Profile
-        </h1>
+        {/* Profile Card */}
+        <div className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-md border border-white/30 rounded-lg p-8 shadow-lg">
+          <h1 className="text-2xl font-semibold text-white text-center mb-6">
+            Your Profile
+          </h1>
 
-        {/* Profile Picture */}
-        <div className="flex justify-center mb-4">
-          <img
-            src={user.profilePicture || "/default-profile.png"} // Fallback image
-            alt="Profile"
-            className="w-24 h-24 rounded-full border-2 border-purple-500"
-          />
-        </div>
-
-        {/* User Info */}
-        <div className="text-white">
-          {/* Username */}
-          <div className="mb-4">
-            <label className="block text-sm text-white mb-2">Username</label>
-            <input
-              type="text"
-              value={user.username}
-              disabled
-              className="w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg"
+          {/* Profile Picture */}
+          <div className="flex justify-center mb-4">
+            <img
+              src={
+                `http://localhost:3000${user.profilePicture}` ||
+                "/default-profile.png"
+              } // Fallback image
+              alt="Profile"
+              className="w-24 h-24 rounded-full border-2 border-purple-500"
             />
           </div>
 
-          {/* Email */}
-          <div className="mb-4">
-            <label className="block text-sm text-white mb-2">Email</label>
-            <input
-              type="email"
-              value={user.email}
-              disabled
-              className="w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg"
-            />
-          </div>
-
-          {/* Password (Hidden in Asterisks) */}
-          <div className="mb-4">
-            <label className="block text-sm text-white mb-2">Password</label>
-            <input
-              type="password"
-              value="********"
-              disabled
-              className="w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg"
-            />
-          </div>
-
-          {/* Bio */}
-          {user.bio && (
+          {/* File Upload */}
+          {editing && (
             <div className="mb-4">
-              <label className="block text-sm text-white mb-2">Bio</label>
-              <textarea
-                value={user.bio}
-                disabled
-                className="w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg"
-              ></textarea>
+              <label className="block text-sm text-white mb-2">
+                Profile Picture
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full p-2 text-sm text-white bg-transparent border border-white/40 rounded-lg"
+              />
             </div>
           )}
 
-          {/* Profile Visibility */}
-          <div className="flex items-center gap-4 mb-4">
-            <label htmlFor="profileVisibility" className="text-white text-sm">
-              Profile Visibility
-            </label>
-            <input
-              type="checkbox"
-              id="profileVisibility"
-              checked={profileVisibility}
-              onChange={handleVisibilityChange}
-              className="w-5 h-5"
-            />
-          </div>
+          {/* User Info */}
+          <div className="text-white">
+            {/* Username */}
+            <div className="mb-4">
+              <label className="block text-sm text-white mb-2">Username</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                disabled={!editing}
+                className={`w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg ${
+                  editing ? "bg-white/10" : ""
+                }`}
+              />
+            </div>
 
-          {/* Friends & Capsules */}
-          <div className="mb-4">
-            <p className="text-sm text-purple-400">
-              <strong>Friends:</strong> {user.friends?.length || 0}
-            </p>
-            <p className="text-sm text-purple-400">
-              <strong>Capsules:</strong> {user.capsules?.length || 0}
-            </p>
-          </div>
+            {/* Email */}
+            <div className="mb-4">
+              <label className="block text-sm text-white mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                disabled={!editing}
+                className={`w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg ${
+                  editing ? "bg-white/10" : ""
+                }`}
+              />
+            </div>
 
-          {/* Role */}
-          <p className="text-sm text-purple-400">
-            <strong>Role:</strong> {user.role}
-          </p>
+            {/* Bio */}
+            <div className="mb-4">
+              <label className="block text-sm text-white mb-2">Bio</label>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleInputChange}
+                disabled={!editing}
+                className={`w-full p-3 text-sm text-white bg-transparent border border-white/40 rounded-lg ${
+                  editing ? "bg-white/10" : ""
+                }`}
+              ></textarea>
+            </div>
+
+            {/* Edit and Save Buttons */}
+            {!editing ? (
+              <button
+                onClick={() => setEditing(true)}
+                className="w-full py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                className="w-full py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Save Changes
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
