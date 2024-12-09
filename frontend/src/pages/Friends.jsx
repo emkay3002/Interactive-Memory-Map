@@ -9,7 +9,6 @@ const FriendsPage = ({ currentUserId }) => {
 
   // Fetch current user data on page load
   useEffect(() => {
-    // You can fetch current user data here using `currentUserId` if needed
     const token = localStorage.getItem("token");
     if (token) {
       try {
@@ -30,8 +29,11 @@ const FriendsPage = ({ currentUserId }) => {
   return (
     <div className="homepage-container">
       <GenNavbar />
-      <div className="gradient-overlay">
-        <h1>Friends Page</h1>
+      <h1>Friends Page</h1>
+
+      <div className="gradient-overlay"></div>
+
+      <div className="friend-search-container">
         {currentUserUsername ? (
           <FriendSearch currentUserUsername={currentUserUsername} />
         ) : (

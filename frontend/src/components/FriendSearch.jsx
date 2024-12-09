@@ -48,21 +48,23 @@ const FriendSearch = ({ currentUserUsername }) => {
   return (
     <div className="friend-search">
       <h2>Search for Friends</h2>
-      <input
-        type="text"
-        placeholder="Search by username"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button onClick={searchUsers}>Search</button>
+      <div className="search-input-container">
+        <input
+          type="text"
+          placeholder="Search by username"
+          value={searchQuery}  // Binding the input field to state
+          onChange={(e) => setSearchQuery(e.target.value)}  // Updating the state with input changes
+        />
+        <button onClick={searchUsers}>Search</button>
+      </div>
 
       <ul>
         {results.map((user) => (
-          <li key={user.username}>
+          <li key={user.username} className="friend-item">
             <img
               src={user.profilePicture || "default-profile.png"}
               alt={`${user.username}'s profile`}
-              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+              className="profile-picture"
             />
             <span>{user.username}</span>
             <button onClick={() => addFriend(user.username)}>Add Friend</button>
