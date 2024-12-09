@@ -1,21 +1,16 @@
-const Prediction = require("../models/predictions");
+const mongoose = require("mongoose");
 
-const createPrediction = async (req, res) => {
-  try {
-    const { title, description, predictedOutcome, predictionDate } = req.body;
+const { v4: uuidv4 } = require("uuid");
 
-    const newPrediction = new Prediction({
-      title,
-      description,
-      predictedOutcome,
-      predictionDate,
-    });
+const predictionSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String },
+    predictedOutcome: { type: String },
+    predictionDate: { type: Date, required: true },
+    predictionId: { type: String, unique: true, default: uuidv4 }, // Generate unique ID
+  },
+  { timestamps: true }
+);
 
-    await newPrediction.save();
-    res.status(201).json({ message: "Prediction created successfully!", prediction: newPrediction });
-  } catch (error) {
-    res.status(500).json({ error: "Error creating prediction" });
-  }
-};
-
-module.exports = { createPrediction };
+module.exports = mongoose.model("Prediction", predictionSchema);
