@@ -6,13 +6,13 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Check if the user is already logged in
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("token");
     if (isAuthenticated) {
-      navigate("/loggedin"); // Redirect to logged-in page if already authenticated
+      navigate("/signin"); // Redirect to logged-in page if already authenticated
     }
   }, [navigate]);
 
@@ -29,11 +29,15 @@ const LoginPage = () => {
         },
         body: JSON.stringify({ username, password }),
       });
+
       const data = await response.json();
-      console.log("Login successful:", data);
-      
-      if (data.success === false) {
-        throw new Error("Login failed. Please check your credentials.");
+      console.log("Login response:", data); // Log the full response to see its structure
+
+      if (!response.ok || !data.token) {
+        // If response is not ok (non-2xx status code) or token is missing, show error
+        throw new Error(
+          data.message || "Login failed. Please check your credentials."
+        );
       } else {
         alert("User logged in successfully!");
 
@@ -41,11 +45,11 @@ const LoginPage = () => {
         localStorage.setItem("token", data.token);
 
         // Redirect to the homepage (logged-in page)
-        navigate("/loggedin"); 
+        navigate("/loggedin");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      setError(error.message);
+      setError(error.message); // Display error message to the user
     }
   };
 

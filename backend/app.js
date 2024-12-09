@@ -2,14 +2,21 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 require("dotenv").config();
+const path = require("path");
 const capsuleRoutes = require("./routes/capsuleRoutes");
 const { authMiddleware, adminOnly } = require("./middlewares/authMiddleware");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 const predictionsRoute = require("./routes/predictionsRoute");
+
+const userRoutes = require("./routes/userRoutes");
+
 //const taskRoutes = require("./routes/tasks");
 const friendshipRoutes = require("./routes/friendshipRoutes");
 const app = express();
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Middleware setup
 app.use(express.json());
@@ -22,6 +29,8 @@ app.use((req, res, next) => {
 app.use("/auth", authRoutes);
 app.use("/api/capsules", capsuleRoutes);
 app.use("/api/predictions", predictionsRoute);
+app.use("/api", aiRoutes);
+app.use("/user", userRoutes);
 
 app.use("/api/friendships", friendshipRoutes);
 
